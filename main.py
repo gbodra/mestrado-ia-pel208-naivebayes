@@ -7,6 +7,68 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 
+class NaiveBayes:
+    def __init__(self):
+        self.x1 = {}
+        self.x2 = {}
+        self.x3 = {}
+        self.x4 = {}
+        self.y = {}
+
+    def fit(self, input):
+        classes = np.unique(input[4])
+        x1_unique = np.unique(input[0])
+        x2_unique = np.unique(input[1])
+        x3_unique = np.unique(input[2])
+        x4_unique = np.unique(input[3])
+
+        for item in classes:
+            self.y[item] = len(input.loc[input[4] == item]) / len(input)
+
+        for item in x1_unique:
+            outputs_calc = []
+            for class_item in classes:
+                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
+                outputs_calc.append(prob)
+            self.x1[item] = outputs_calc
+
+        for item in x2_unique:
+            outputs_calc = []
+            for class_item in classes:
+                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
+                outputs_calc.append(prob)
+            self.x2[item] = outputs_calc
+
+        for item in x3_unique:
+            outputs_calc = []
+            for class_item in classes:
+                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
+                outputs_calc.append(prob)
+            self.x3[item] = outputs_calc
+
+        for item in x4_unique:
+            outputs_calc = []
+            for class_item in classes:
+                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
+                outputs_calc.append(prob)
+            self.x4[item] = outputs_calc
+
+    def predict(self, input):
+        x1_calc = self.x1[input[0]]
+        x2_calc = self.x2[input[1]]
+        x3_calc = self.x3[input[2]]
+        x4_calc = self.x4[input[3]]
+        prob_no = x1_calc[0] * x2_calc[0] * x3_calc[0] * x4_calc[0] * self.y[0]
+        prob_yes = x1_calc[1] * x2_calc[1] * x3_calc[1] * x4_calc[1] * self.y[1]
+
+        if prob_no > prob_yes:
+            return False
+
+        if prob_yes > prob_no:
+            return True
+
+        return None
+
 class NaiveBayesGaussian:
     """
     Classe do classificador NaiveBayesGaussian
@@ -170,7 +232,7 @@ def dataset_container():
     ax = fig.add_subplot(111, projection='3d')
 
     # multiplica por 30 simplesmente para melhorar a exibição no gráfico
-    ax.scatter(test_data[1], test_data[2], test_data[3], s=test_data[4] * 30, c=result, marker="o")
+    ax.scatter(test_data[1], test_data[2], test_data[3], s=test_data[4] * 20, c=result, marker="o")
 
     plt.title("Dataset: Balance")
     plt.show()
@@ -178,8 +240,16 @@ def dataset_container():
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
-dataset_iris()
+# dataset_iris()
 
-dataset_haberman()
+# dataset_haberman()
 
-dataset_container()
+# dataset_container()
+
+aula_data = pd.read_csv("./data/aula.txt", header=None)
+nb = NaiveBayes()
+nb.fit(aula_data)
+ex1 = nb.predict([2, 2, 0, 0]) or nb.predict([2, 2, 0, 1]) or nb.predict([2, 2, 1, 0]) or nb.predict([2, 2, 1, 1])
+logging.info("35 anos e renda média, compra computador? %s", ex1)
+ex2 = nb.predict([2, 2, 1, 0])
+logging.info("35 anos, renda média, estudante e crédito fair, compra computador? %s", ex2)
