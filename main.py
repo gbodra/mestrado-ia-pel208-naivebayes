@@ -17,41 +17,29 @@ class NaiveBayes:
 
     def fit(self, input):
         classes = np.unique(input[4])
-        x1_unique = np.unique(input[0])
-        x2_unique = np.unique(input[1])
-        x3_unique = np.unique(input[2])
-        x4_unique = np.unique(input[3])
 
         for item in classes:
             self.y[item] = len(input.loc[input[4] == item]) / len(input)
 
-        for item in x1_unique:
-            outputs_calc = []
-            for class_item in classes:
-                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
-                outputs_calc.append(prob)
-            self.x1[item] = outputs_calc
+        # remove 1 visto que no dataset temos a classe também
+        number_feature = len(input.columns - 1)
 
-        for item in x2_unique:
-            outputs_calc = []
-            for class_item in classes:
-                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
-                outputs_calc.append(prob)
-            self.x2[item] = outputs_calc
-
-        for item in x3_unique:
-            outputs_calc = []
-            for class_item in classes:
-                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
-                outputs_calc.append(prob)
-            self.x3[item] = outputs_calc
-
-        for item in x4_unique:
-            outputs_calc = []
-            for class_item in classes:
-                prob = len(input.loc[(input[4] == class_item) & (input[0] == item)]) / len(input.loc[input[4] == class_item])
-                outputs_calc.append(prob)
-            self.x4[item] = outputs_calc
+        for i in range(number_feature):
+            unique = np.unique(input[i])
+            for item in unique:
+                outputs_calc = []
+                for class_item in classes:
+                    prob = len(input.loc[(input[4] == class_item) & (input[i] == item)]) / len(
+                        input.loc[input[4] == class_item])
+                    outputs_calc.append(prob)
+                if i == 0:
+                    self.x1[item] = outputs_calc
+                if i == 1:
+                    self.x2[item] = outputs_calc
+                if i == 2:
+                    self.x3[item] = outputs_calc
+                if i == 3:
+                    self.x4[item] = outputs_calc
 
     def predict(self, input):
         x1_calc = self.x1[input[0]]
@@ -240,16 +228,16 @@ def dataset_container():
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
-dataset_iris()
+# dataset_iris()
 
-dataset_haberman()
+# dataset_haberman()
 
-dataset_container()
+# dataset_container()
 
 aula_data = pd.read_csv("./data/aula.txt", header=None)
 nb = NaiveBayes()
 nb.fit(aula_data)
-ex1 = nb.predict([2, 2, 0, 0]) or nb.predict([2, 2, 0, 1]) or nb.predict([2, 2, 1, 0]) or nb.predict([2, 2, 1, 1])
+ex1 = nb.predict([2, 2, 0, 0]) and nb.predict([2, 2, 0, 1]) and nb.predict([2, 2, 1, 0]) and nb.predict([2, 2, 1, 1])
 logging.info("35 anos e renda média, compra computador? %s", ex1)
 ex2 = nb.predict([2, 2, 1, 0])
 logging.info("35 anos, renda média, estudante e crédito fair, compra computador? %s", ex2)

@@ -6,7 +6,7 @@
 
     1.1 E se a pessoa for estudante e tiver um crédito bom (fair)?
     
-    35 anos, renda média, estudante e crédito fair, compra computador? None. Como pelos dados de entrada não haviam casos que representassem esse cenário o algoritmo não conseguiu chegar a uma recomendação
+    35 anos, renda média, estudante e crédito fair, compra computador? True
 
 2. Use o Naïve Bayes Gaussiano para classificar o dataset Iris, e mais dois de sua escolha (os mesmos do trabalho anterior)
 
