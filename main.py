@@ -240,11 +240,11 @@ def dataset_container():
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
-# dataset_iris()
+dataset_iris()
 
-# dataset_haberman()
+dataset_haberman()
 
-# dataset_container()
+dataset_container()
 
 aula_data = pd.read_csv("./data/aula.txt", header=None)
 nb = NaiveBayes()
